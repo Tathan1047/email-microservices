@@ -1,7 +1,7 @@
 from celery import chain
 from django import forms
 from apps.uploadfile.models import Fileupload
-from apps.uploadfile.task import getname, generate_report,sendfile
+from apps.uploadfile.task import getname, generate_report,sendfile, cleanfile
 
 
 class UploadForm(forms.ModelForm):
@@ -16,7 +16,8 @@ class UploadForm(forms.ModelForm):
         file = super(UploadForm, self).save(commit=False)
         if commit:
             file.save()
-        chain(getname.s(file.id), generate_report.s(), sendfile.s())()
+        #Funcion que realiza actividades en cadena
+        (getname.s(file.id) | generate_report.si() | sendfile.s() | cleanfile ())()
 
 
 

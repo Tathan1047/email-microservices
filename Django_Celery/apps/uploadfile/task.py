@@ -1,3 +1,4 @@
+from os import remove
 
 from celery import current_app
 from django.contrib.auth.models import User
@@ -46,11 +47,9 @@ def getname (upload_id):
 
 
 
-@app.task()
+@app.task
 def generate_report():
    user = User.objects.filter(is_active=1)
-
-   print(user)
 
    workbook =xlsxwriter.Workbook('documents/Report_user_Active.xls')
    worksheet = workbook.add_worksheet()
@@ -82,14 +81,17 @@ def generate_report():
 def sendfile(path):
     e = EmailMessage()
     e.attach_file(path)
-    e.body = "Those users are active"
-    e.subject = "Users Actives in our server"
+    e.body = "List User Actives"
+    e.subject = "Users Actives in server"
     e.to = ADMIN_EMAIL
     e.send()
+    print("Email Sent")
     return path
 
 
-
+@app.task
+def cleanfile(path):
+    remove(path)
 
 
 
