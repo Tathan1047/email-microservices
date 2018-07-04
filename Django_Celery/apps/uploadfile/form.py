@@ -17,7 +17,7 @@ class UploadForm(forms.ModelForm):
         if commit:
             file.save()
         #Funcion que realiza actividades en cadena
-        (getname.s(file.id) | generate_report.si() | sendfile.s() | cleanfile ())()
+        (getname.s(file.id) | generate_report.si() | sendfile.s())()
 
 
 

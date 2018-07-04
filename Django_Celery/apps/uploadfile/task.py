@@ -94,6 +94,9 @@ def cleanfile(path):
     remove(path)
 
 
+@app.task(bind=True)
+def generate_report_n(self):
+    (generate_report.si() | sendfile.s())()
 
 
 
