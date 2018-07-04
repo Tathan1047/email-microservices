@@ -21,6 +21,11 @@ app.conf.beat_schedule = {
         #Put Time
         'schedule': crontab(minute='*/1'),
     },
+    #Here you can add other task
+    #'Delete Report': {
+     #   'task': 'apps.uploadfile.task.deletefile',
+      #  'schedule': crontab(minute='*/2'),
+    #}
 }
 
 

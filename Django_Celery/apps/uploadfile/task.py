@@ -43,10 +43,6 @@ def getname (upload_id):
         from django.contrib.auth.models import User
         User.objects.create(**kwargs)
 
-
-
-
-
 @app.task
 def generate_report():
    user = User.objects.filter(is_active=1)
@@ -90,13 +86,13 @@ def sendfile(path):
 
 
 @app.task
-def cleanfile(path):
+def deletefile(path):
     remove(path)
+    print("File Deleted")
 
 
 @app.task(bind=True)
 def generate_report_n(self):
-    (generate_report.si() | sendfile.s())()
-
+    (generate_report.si() | sendfile.s() | deletefile.s())()
 
 
